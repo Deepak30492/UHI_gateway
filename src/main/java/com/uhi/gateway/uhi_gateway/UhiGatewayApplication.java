@@ -10,16 +10,11 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @SpringBootApplication
-@EnableAsync
+//@EnableAsync
 public class UhiGatewayApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(UhiGatewayApplication.class, args);
-	}
-
-	@Bean
-	public RestTemplate restemplate() {
-		return new RestTemplate();
 	}
 
 	@Bean
