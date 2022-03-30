@@ -18,6 +18,11 @@ public class UhiGatewayApplication {
 	}
 
 	@Bean
+	public RestTemplate restemplate() {
+		return new RestTemplate();
+	}
+
+	@Bean
 	public Executor taskExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 		executor.setCorePoolSize(2);

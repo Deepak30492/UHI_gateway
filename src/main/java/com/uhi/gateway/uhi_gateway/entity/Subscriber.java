@@ -9,6 +9,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Subscriber {
 	
+	@Override
+	public String toString() {
+		return "Subscriber [subscriberId=" + subscriberId + ", country=" + country + ", city=" + city + ", domain="
+				+ domain + ", signingPublicKey=" + signingPublicKey + ", encryptedPublicKey=" + encryptedPublicKey
+				+ ", validFrom=" + validFrom + ", validUntil=" + validUntil + ", subscribed=" + subscribed
+				+ ", endpoint=" + endpoint + ", type=" + type + "]";
+	}
+
 	@JsonProperty("subscriber_id")
 	private String subscriberId;
 

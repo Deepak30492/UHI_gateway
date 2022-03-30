@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.dhp.sdk.beans.Response;
 import com.uhi.gateway.uhi_gateway.entity.Subscriber;
 import com.uhi.gateway.uhi_gateway.registry.RegistryKeyFinder;
 import com.uhi.gateway.uhi_gateway.service.HSPService;
@@ -27,23 +29,25 @@ public class GatewayController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(GatewayController.class);
 	
-	@Autowired
-	public static List<Subscriber> subsribers = new RegistryKeyFinder().lookup();
+	
+	  @Autowired public static List<Subscriber> subsribers = new RegistryKeyFinder().lookup();
+	 
 
 	@Autowired
 	HSPService Hspservice;
 
 	@PostMapping(value = "/search", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> search(@Valid @RequestBody Subscriber req) {
+	public ResponseEntity<Response> search(@Valid @RequestBody String req) {
 		LOGGER.info("Search request| " + req);
-		Hspservice.verify(subsribers, req);
-		return ResponseEntity.status(HttpStatus.OK).body("Acknowledged");
+	//	Hspservice.verify(subsribers, req);
+	//	Hspservice.forwardToRequestor(req, subsribers);
+		return ResponseEntity.status(HttpStatus.OK).body(Hspservice.generateAck(req));
 	}
 
 	@PostMapping(value = "/on_search", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<String> on_search(@Valid @RequestBody String req) {
+	public ResponseEntity<Response> on_search(@Valid @RequestBody String req) {
 		LOGGER.info("on_Search request| " + req);
-		return ResponseEntity.status(HttpStatus.OK).body("Acknowledged");
+		return ResponseEntity.status(HttpStatus.OK).body(Hspservice.generateAck(req));
 	}
 
 }

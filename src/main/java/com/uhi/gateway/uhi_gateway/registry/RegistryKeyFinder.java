@@ -49,10 +49,10 @@ public class RegistryKeyFinder {
 		subscriberMap.put("city", "");
 		subscriberMap.put("domain", "");
 		subscriberMap.put("type", "BPP");
-		subscriberMap.put("status", "");
+		subscriberMap.put("status", "SUBSCRIBED");
 		Subscriber[] subscribers = template.postForEntity(registry_url, subscriberMap, Subscriber[].class).getBody();
-		System.out.println("Lookup Response|" + subscribers);
-		LOGGER.info("Lookup Response {}", subscribers.toString());
+		System.out.println("Lookup Response|" +  Arrays.toString(subscribers));
+		LOGGER.info("Lookup Response {}", subscribers);
 		/*
 		 * JSONArray responses = new
 		 * Call<JSONObject>().method(HttpMethod.POST).url(registry_url+"/lookup").
