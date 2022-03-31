@@ -15,32 +15,39 @@ import com.dhp.sdk.beans.Ack;
 import com.dhp.sdk.beans.Error;
 import com.dhp.sdk.beans.MessageAck;
 import com.dhp.sdk.beans.Response;
-import com.uhi.gateway.uhi_gateway.controller.GatewayController;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uhi.gateway.uhi_gateway.entity.Subscriber;
 
 @Service
 public class HSPService {
-	
+
 	@Autowired
 	RestTemplate template;
 
+	ObjectMapper mapper = new ObjectMapper();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(HSPService.class);
 
-	public void verify(List<Subscriber> subsribers, Subscriber req) {
-		// TODO Auto-generated method stub
+	public Response verify(List<Subscriber> subsribers, String req) {
 		try {
+			JsonNode rootNode = mapper.readTree(req);
+			JsonNode metaNode = rootNode.get("context");
+			System.out.println("node|" + metaNode.get("consumer_id").textValue());
 			Optional.ofNullable(subsribers.stream()
-			  .filter(customer -> req.getSubscriberId().equals(customer.getSubscriberId()))
-			  .findAny()
-			  .orElseThrow(() -> new Exception("Subscriber not found - "+req.getSubscriberId())));
+					.filter(subs -> metaNode.get("consumer_id").textValue().equals(subs.getSubscriberId())).findAny()
+					.orElseThrow(() -> new Exception("Subscriber not found - " + metaNode.get("consumer_id"))));
+			return generateAck(req);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			LOGGER.error("Exception in {} {}",HSPService.class,e.getMessage());
+			LOGGER.error("Exception in {} {}", HSPService.class, e.getMessage());
+			Error err = new Error("", "404", "", "Subscriber not found.");
+			return generateNack(req, err);
 		}
 	}
 
-	public Response generateAck(String req) {
+	 public Response generateAck(String req) {
 		Ack ack = new Ack();
 		Response resp = new Response();
 		MessageAck msgack = new MessageAck();
@@ -49,11 +56,11 @@ public class HSPService {
 		msgack.setAck(ack);
 		resp.setMessage(msgack);
 		resp.setError(err);
-		
+
 		return resp;
 	}
-	
-	public Response generateNack(String req, Error err) {
+
+	 public Response generateNack(String req, Error err) {
 		Ack ack = new Ack();
 		Response resp = new Response();
 		MessageAck msgack = new MessageAck();
@@ -61,13 +68,13 @@ public class HSPService {
 		msgack.setAck(ack);
 		resp.setMessage(msgack);
 		resp.setError(err);
-		
+
 		return resp;
 	}
 
 	public void forwardToRequestor(@Valid String req, List<Subscriber> subsribers) {
 		// TODO Auto-generated method stub
-		
+
 		template.postForObject("requestor_URL", subsribers, null);
 	}
 

@@ -53,28 +53,7 @@ public class RegistryKeyFinder {
 		Subscriber[] subscribers = template.postForEntity(registry_url, subscriberMap, Subscriber[].class).getBody();
 		System.out.println("Lookup Response|" +  Arrays.toString(subscribers));
 		LOGGER.info("Lookup Response {}", subscribers);
-		/*
-		 * JSONArray responses = new
-		 * Call<JSONObject>().method(HttpMethod.POST).url(registry_url+"/lookup").
-		 * input(subscriber.getInner()).inputFormat(InputFormat.JSON)
-		 * .header("content-type", MimeType.APPLICATION_JSON.toString())
-		 * .header("accept",MimeType.APPLICATION_JSON.toString()).getResponseAsJson();
-		 */
-		/*
-		 * if (responses == null) { responses = new JSONArray(); }
-		 */
-		/*
-		 * for (Iterator<?> i = responses.iterator(); i.hasNext(); ) { JSONObject
-		 * object1 = (JSONObject) i.next();
-		 * 
-		 * if ("SUBSCRIBED".equals(object1.get("status"))){ i.remove(); }
-		 * 
-		 * if ("No".equals(object1.get("subscribed"))){ i.remove(); } }
-		 */
-		/*
-		 * List<Subscriber> subscribers = new ArrayList<>(); for (Object o : responses)
-		 * { subscribers.add(new Subscriber((JSONObject) o)); } return subscribers;
-		 */
+		
 		return Arrays.stream(subscribers).map(object -> mapper.convertValue(object, Subscriber.class))
 				.collect(Collectors.toList());
 	}

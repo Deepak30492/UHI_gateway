@@ -14,7 +14,7 @@ public class Subscriber {
 		return "Subscriber [subscriberId=" + subscriberId + ", country=" + country + ", city=" + city + ", domain="
 				+ domain + ", signingPublicKey=" + signingPublicKey + ", encryptedPublicKey=" + encryptedPublicKey
 				+ ", validFrom=" + validFrom + ", validUntil=" + validUntil + ", subscribed=" + subscribed
-				+ ", endpoint=" + endpoint + ", type=" + type + "]";
+				+ ", endpoint=" + endpoint + ", type=" + type + ", url=" + url + "]";
 	}
 
 	@JsonProperty("subscriber_id")
@@ -40,6 +40,18 @@ public class Subscriber {
 	
 	private String endpoint;
 	
+	private String type;
+	
+	private String url;
+	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public String getEndpoint() {
 		return endpoint;
 	}
@@ -64,8 +76,6 @@ public class Subscriber {
 		this.type = type;
 	}
 
-	private String type;
-
 	public Subscriber() {
 
 	}
@@ -73,7 +83,7 @@ public class Subscriber {
 	public Subscriber(String subscriber_id, String country, String city, String domain, String signingPublicKey,
 			String encryptedPublicKey,boolean subscribed, String endpoint,
 			String type) {
-		this.subscriberId = subscriberId;
+		this.subscriberId = subscriber_id;
 		this.country = country;
 		this.city = city;
 		this.domain = domain;

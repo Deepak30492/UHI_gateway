@@ -26,12 +26,11 @@ import com.uhi.gateway.uhi_gateway.service.HSPService;
 @Validated
 @RequestMapping("/gateway")
 public class GatewayController {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GatewayController.class);
-	
-	
-	  @Autowired public static List<Subscriber> subsribers = new RegistryKeyFinder().lookup();
-	 
+
+	@Autowired
+	public static List<Subscriber> subsribers = new RegistryKeyFinder().lookup();
 
 	@Autowired
 	HSPService Hspservice;
@@ -39,9 +38,8 @@ public class GatewayController {
 	@PostMapping(value = "/search", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Response> search(@Valid @RequestBody String req) {
 		LOGGER.info("Search request| " + req);
-	//	Hspservice.verify(subsribers, req);
-	//	Hspservice.forwardToRequestor(req, subsribers);
-		return ResponseEntity.status(HttpStatus.OK).body(Hspservice.generateAck(req));
+		// Hspservice.forwardToRequestor(req, subsribers);
+		return ResponseEntity.status(HttpStatus.OK).body(Hspservice.verify(subsribers, req));
 	}
 
 	@PostMapping(value = "/on_search", consumes = "application/json", produces = "application/json")
